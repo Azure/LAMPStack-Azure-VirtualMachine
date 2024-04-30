@@ -1,33 +1,71 @@
-# Project
+# Deploy a LAMP VM to Azure Action
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+## Description
 
-As the maintainer of this project, please make a few updates:
+This GitHub Action automates the deployment of a LAMP (Linux, Apache, MySQL, PHP) stack on an Azure Virtual Machine (VM). The action provisions the VM and deploys the LAMP stack using an ARM template and parameter file.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+**This documentation is for v2 of vaibbavisk20/deploy_lamp_vm_azure**
 
-## Contributing
+## Inputs
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+Please install the Azure OIDC app from the Github Marketplace to populate the below inputs as secrets in your repo
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+- **client-id** (required): Client ID used for Azure login.
+- **tenant-id** (required): Tenant ID used for Azure login.
+- **subscription-id** (required): Azure subscription ID used with the `az login`.
+- **resource-group-name** (required): Resource group where Azure resources will be deployed.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+Set these values as secrets on your repo where the workflow runs
 
-## Trademarks
+- **admin-username** (required): Admin username to login to the VM.
+  
+  Username must only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number.
+  Usernames must not include reserved words.
+  The value is in between 1 and 64 characters long.
+  
+- **admin-password** (required): Admin password to login to the VM.
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+  Password must have 3 of the following: 1 lower case character, 1 upper case character, 1 number, and 1 special character.
+  The value must be between 12 and 72 characters long.
+
+## Usage
+
+Create this workflow in your repo on this path: .github/workflows/workflow_file.yml
+
+```yaml
+name: workflow to deploy lamp stack on azure
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-resources-to-azure:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout master
+          uses: actions/checkout@v3
+          
+        - name: Deploy a LAMP VM to Azure action
+          uses: vaibbavisk20/deploy_lamp_vm_azure@v2
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            resource-group-name: ${{secrets.AZURE_RG}}
+            admin-username: ${{secrets.ADMIN_USERNAME}}
+            admin-password: ${{secrets.ADMIN_PASSWORD}}
+```
+## Output
+
+The action creates a VM which can be viewed on portal.azure.com and provides information about the deployed VM, including the virtual machine name, location, and VM size.
+        
