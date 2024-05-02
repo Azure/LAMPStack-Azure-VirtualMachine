@@ -1,14 +1,12 @@
-# Deploy a LAMP VM to Azure Action
+# Deploy LAMP stack to Azure Virtual Machine
 
 ## Description
 
 This GitHub Action automates the deployment of a LAMP (Linux, Apache, MySQL, PHP) stack on an Azure Virtual Machine (VM). The action provisions the VM and deploys the LAMP stack using an ARM template and parameter file.
 
-**This documentation is for v2 of vaibbavisk20/deploy_lamp_vm_azure**
+**Note**: Please install the [Configure-Azure-Settings](https://github.com/apps/configure-azure-settings) app from the GitHub Marketplace to populate the below inputs as secrets in your repository
 
 ## Inputs
-
-Please install the Azure OIDC app from the Github Marketplace to populate the below inputs as secrets in your repo
 
 - **client-id** (required): Client ID used for Azure login.
 - **tenant-id** (required): Tenant ID used for Azure login.
@@ -56,7 +54,7 @@ jobs:
           uses: actions/checkout@v3
           
         - name: Deploy a LAMP VM to Azure action
-          uses: vaibbavisk20/deploy_lamp_vm_azure@v2
+          uses: Azure/LAMPStack-Azure-VirtualMachine@v2
           with:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
