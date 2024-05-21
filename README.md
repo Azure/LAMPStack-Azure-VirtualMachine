@@ -13,7 +13,7 @@ This GitHub Action automates the deployment of a LAMP (Linux, Apache, MySQL, PHP
 - **subscription-id** (required): Azure subscription ID used with the `az login`.
 - **resource-group-name** (required): Resource group where Azure resources will be deployed.
 
-Set these values as secrets on your repo where the workflow runs
+Set these values as secrets on your repo where the workflow runs:
 
 - **admin-username** (required): Admin username to login to the VM.
   
@@ -28,7 +28,7 @@ Set these values as secrets on your repo where the workflow runs
 
 ## Usage
 
-Create this workflow in your repo on this path: .github/workflows/workflow_file.yml
+Create this workflow in your repo on this path: `.github/workflows/workflow_file.yml`
 
 ```yaml
 name: workflow to deploy lamp stack on azure
@@ -65,5 +65,4 @@ jobs:
 ```
 ## Output
 
-The action creates a VM which can be viewed on portal.azure.com and provides information about the deployed VM, including the virtual machine name, location, and VM size.
-        
+The action creates a VM which can be viewed on portal.azure.com and provides information about the deployed VM, including the VM name, location, and VM size.
